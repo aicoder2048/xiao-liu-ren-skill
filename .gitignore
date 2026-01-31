@@ -12,7 +12,10 @@ wheels/
 # Agentic layer
 project_scaffolding/
 adws/
-.claude/
+.claude/*
+!.claude/skills/
+.claude/skills/*
+!.claude/skills/mini-six-ren/
 ai_docs/
 specs/
 .env
