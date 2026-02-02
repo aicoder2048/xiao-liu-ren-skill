@@ -1,0 +1,48 @@
+# 小六壬 AI 解读 - 模型配置
+#
+# 取消注释下方某一行以启用第三方模型解读。
+# 不配置或全部注释 = 使用 Claude Code 内置模型解读（默认）。
+#
+# 格式: model: provider:model_name
+# 对应的 API Key 需在 .env 中配置。
+#
+# These are tested, while others are **NOT** tested.
+# - model: deepseek:deepseek-chat
+# - model: kimi:kimi-k2.5
+# - model: openai:gpt-5-mini
+# - model: openai:gpt-5.2
+#
+# 矛盾
+# - 这个 Skill 如果是在 Claude Code (或者类似的国际版的Coding Agent)里运行, 那么, Kimi/Zhipu/Alibaba 的 base_url 就要用其国际版 (国内版 .cn 的域名 URL不work)
+
+# ==========================================
+# LLM Provider Configuration (2026 Current)
+# ==========================================
+
+# --- DeepSeek (国产之光) ---
+# model: deepseek:deepseek-chat          # Flash/Light: Highly efficient, agent-optimized
+# model: deepseek:deepseek-r1            # Pro/Heavy: Premier reasoning (OpenAI o1 level)
+
+# --- Alibaba Qwen (通义千问) ---
+# model: qwen:qwen3-flash                # Flash/Light: 1M context, high throughput
+# model: qwen:qwen3-max-thinking         # Pro/Heavy: 1T+ parameter powerhouse, rivals GPT-5.2
+
+# --- Moonshot Kimi ---
+# model: kimi:kimi-k2.5                  # Flash/Light: Fast MoE architecture
+# model: kimi:kimi-k2.5-thinking         # Pro/Heavy: Advanced reasoning with Agent Swarm tech
+
+# --- Zhipu GLM (智谱) ---
+# model: glm:glm-5-flash                 # Flash/Light: Sub-second latency for simple tasks
+# model: glm:glm-5-plus                  # Pro/Heavy: Maximum intelligence & multimodal depth
+
+# --- Anthropic ---
+# model: anthropic:claude-sonnet-4.5     # Flash/Light: Your "new fast" - superior coding speed
+# model: anthropic:claude-opus-4.5       # Pro/Heavy: The "Gold Standard" for nuance and complexity
+
+# --- OpenAI ---
+# model: openai:gpt-5-mini               # A faster, more cost-efficient version of GPT-5. It's great for well-defined tasks and precise prompts.
+# model: openai:gpt-5.2                  # Pro/Heavy: The frontier "reasoning" flagship (o5/o6 class)
+
+# --- Google Gemini ---
+# model: google:gemini-3-flash           # Flash/Light: PhD-level reasoning at lightning speed
+# model: google:gemini-3-pro             # Pro/Heavy: World-leading multimodal & "vibe-coding" model
