@@ -1,0 +1,5 @@
+# API keys
+.env
+
+# User-specific model config
+config.yaml

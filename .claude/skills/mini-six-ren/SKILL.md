@@ -10,8 +10,15 @@ Chinese traditional divination system based on the Nine-Palace hand technique. G
 ## Workflow
 
 1. Determine input mode (numbers / datetime / Chinese chars / current time)
-2. Run `scripts/xiaoliu.py` to compute the prediction
-3. Use LLM to analyze the result based on the user's question
+2. Run `scripts/xiaoliu.py --format json` to compute the prediction
+3. Check if `config.yaml` exists and has a `model` field:
+   - **No config** (default): Display `ℹ️ 当前使用 Claude Code 内置模型解读。如需使用第三方模型，请创建 config.yaml`。Then use the built-in LLM to analyze the result following the "LLM Analysis" section below.
+   - **Has config + API key**: Display `ℹ️ 当前使用 <model> 解读`。Run `scripts/interpret.py` with the prediction JSON piped in:
+     ```bash
+     uv run scripts/xiaoliu.py --now --question "问题" --format json | \
+       uv run scripts/interpret.py --question "问题"
+     ```
+   - **Has config, missing API key**: Display `⚠️ 请在 .env 中设置 <ENV_KEY>`。Fall back to built-in LLM analysis.
 4. Format the report using `assets/template.md`
 
 ## Quick Start
@@ -70,6 +77,56 @@ After getting the JSON prediction result, provide an analysis following this str
 ## Report Output
 
 After generating the prediction and LLM analysis, format using `assets/template.md`. Replace all `{{placeholder}}` variables with actual values from the script output and LLM analysis.
+
+## Third-Party Model Configuration (Optional)
+
+By default, the skill uses Claude Code's built-in LLM for interpretation. To use a third-party model instead:
+
+### Step 1: Create `config.yaml`
+
+Create `config.yaml` in the skill root directory (`mini-six-ren/config.yaml`):
+
+```yaml
+# 格式: provider:model_name
+model: deepseek:deepseek-chat
+```
+
+Format: `provider:model_name`
+
+### Step 2: Set API Key in `.env`
+
+Add your API key to `mini-six-ren/.env`:
+
+```bash
+DEEPSEEK_API_KEY=sk-...
+```
+
+### Supported Providers
+
+| Provider prefix | API Key env var | Notes |
+|---|---|---|
+| `openai` | `OPENAI_API_KEY` | GPT series |
+| `anthropic` | `ANTHROPIC_API_KEY` | Claude series |
+| `google-gla` | `GEMINI_API_KEY` | Gemini series |
+| `deepseek` | `DEEPSEEK_API_KEY` | DeepSeek |
+| `kimi` | `MOONSHOT_API_KEY` | Moonshot Kimi |
+| `qwen` | `DASHSCOPE_API_KEY` | Alibaba Qwen |
+| `glm` | `ZHIPU_API_KEY` | Zhipu ChatGLM |
+
+### Examples
+
+```yaml
+# DeepSeek
+model: deepseek:deepseek-chat
+
+# GPT-4o
+# model: openai:gpt-4o
+
+# Qwen
+# model: qwen:qwen-plus
+```
+
+To switch back to built-in LLM, simply delete `config.yaml`.
 
 ## Reference
 
