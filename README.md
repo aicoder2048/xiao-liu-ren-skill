@@ -8,9 +8,21 @@
 
 ## 安装
 
-### Claude Code CLI
+### 一键安装（推荐）
 
-将 `.claude/skills/mini-six-ren/` 目录复制到你的任意项目的 `.claude/skills/` 下即可：
+使用 [skills.sh](https://skills.sh) 一键安装到当前项目：
+
+```bash
+# 使用 bunx
+bunx skills add https://github.com/aicoder2048/mini-six-ren-skill
+
+# 或使用 npx
+npx skills add https://github.com/aicoder2048/mini-six-ren-skill
+```
+
+### 手动安装
+
+将 `.claude/skills/mini-six-ren/` 目录复制到你的任意项目的 `.claude/skills/` 下：
 
 ```bash
 # 在目标项目根目录执行
@@ -18,7 +30,7 @@ mkdir -p .claude/skills
 cp -r <path-to>/XiaoLiuRenSkill/.claude/skills/mini-six-ren .claude/skills/
 ```
 
-复制完成后，在该项目中使用 Claude Code 时，输入占卜相关的自然语言（如"占一卦""算算运势"等），Claude 会自动识别并调用此技能。
+安装完成后，在该项目中使用 Claude Code 时，输入占卜相关的自然语言（如"占一卦""算算运势"等），Claude 会自动识别并调用此技能。
 
 **运行环境要求**：
 - Python >= 3.10
@@ -255,13 +267,78 @@ Claude Code 会根据下周三的具体日期调用 `--datetime` 模式，生成
 
 ---
 
+## 使用第三方 LLM 解读（可选）
+
+默认情况下，占卜解读由 Claude Code 内置模型完成，无需额外配置。如果你希望使用第三方模型（如 DeepSeek、GPT、Kimi 等），按以下两步配置：
+
+### 第 1 步：在 `config.yaml` 中激活模型
+
+编辑 `.claude/skills/mini-six-ren/config.yaml`，取消注释你想使用的模型行：
+
+```yaml
+# 取消注释下方某一行以启用第三方模型解读。
+# 不配置或全部注释 = 使用 Claude Code 内置模型解读（默认）。
+
+# --- DeepSeek ---
+model: deepseek:deepseek-chat
+
+# --- OpenAI ---
+# model: openai:gpt-5-mini
+# model: openai:gpt-5.2
+
+# --- Moonshot Kimi ---
+# model: kimi:kimi-k2.5
+
+# --- Anthropic ---
+# model: anthropic:claude-sonnet-4.5
+
+# --- Google Gemini ---
+# model: google:gemini-3-flash
+
+# ... 更多选项见 config.yaml 文件
+```
+
+> 同一时间只能激活一个模型，确保只有一行 `model:` 未被注释。
+
+### 第 2 步：在 `.env` 中提供 API Key
+
+参照 `.env.sample`，在 `.claude/skills/mini-six-ren/.env` 中填入对应的 API Key：
+
+```bash
+# 示例：使用 DeepSeek
+DEEPSEEK_API_KEY=sk-your-deepseek-api-key
+
+# 示例：使用 OpenAI
+# OPENAI_API_KEY=sk-your-openai-api-key
+```
+
+完整的 Provider 与 API Key 对照表：
+
+| Provider | `config.yaml` 前缀 | `.env` 变量 |
+|---|---|---|
+| DeepSeek | `deepseek:` | `DEEPSEEK_API_KEY` |
+| OpenAI | `openai:` | `OPENAI_API_KEY` |
+| Anthropic | `anthropic:` | `ANTHROPIC_API_KEY` |
+| Google Gemini | `google:` | `GEMINI_API_KEY` |
+| Moonshot Kimi | `kimi:` | `MOONSHOT_API_KEY` |
+| Alibaba Qwen | `qwen:` | `DASHSCOPE_API_KEY` |
+| Zhipu GLM | `glm:` | `ZHIPU_API_KEY` |
+
+> 切换回内置模型：将 `config.yaml` 中的 `model:` 行全部注释掉即可。
+
+---
+
 ## 项目结构
 
 ```
 .claude/skills/mini-six-ren/       # Claude Code 技能目录
 ├── SKILL.md                        # 技能定义（工作流、触发关键词、分析指南）
+├── config.yaml                     # 第三方 LLM 模型配置（可选）
+├── .env.sample                     # API Key 配置示例
+├── .env                            # API Key（不提交到 Git）
 ├── scripts/
-│   └── xiaoliu.py                  # 核心算法（PEP 723 单文件脚本）
+│   ├── xiaoliu.py                  # 核心算法（PEP 723 单文件脚本）
+│   └── interpret.py                # 第三方 LLM 解读脚本
 ├── examples/
 │   ├── example_number_input.md     # 数字输入示例
 │   ├── example_datetime_input.md   # 日期时间输入示例
